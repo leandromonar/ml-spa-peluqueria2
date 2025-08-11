@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ML Spa Peluquería & Uñas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ====== RESET Y FUENTES ====== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: #000;
+      color: #fff;
+      line-height: 1.7;
+    }
+
+    /* ====== HEADER ====== */
+    header {
+      background: #111;
+      padding: 15px 0;
+      border-bottom: 1px solid #0D7C66;
+    }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* ====== LOGO PEQUEÑO ====== */
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-img {
+      height: 40px;
+      width: auto;
+      border-radius: 50%;
+      border: 2px solid #0D7C66;
+    }
+
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: #0D7C66;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+    }
+
+    nav a {
+      color: #ddd;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.1rem;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #0D7C66;
+    }
+
+    /* ====== HERO ====== */
+    .hero {
+      text-align: center;
+      padding: 120px 20px;
+      background: url('img/fondo-barberia.jpg') no-repeat center;
+      background-size: cover;
+      min-height: 600px;
+      position: relative;
+      color: white;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: -1;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      background: #0D7C66;
+      color: white;
+      padding: 12px 30px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* ====== GALERÍA - COLLAGE HORIZONTAL ====== */
+    .gallery-collage {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .gallery-collage img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 2px solid #0D7C66;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .gallery-collage img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(13, 124, 102, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      .gallery-collage {
+        gap: 6px;
+      }
+      .gallery-collage img {
+        width: 120px;
+        height: 120px;
+      }
+    }
+
+    /* ====== SERVICIOS CATEGORÍAS DESPLEGABLES ====== */
+    #servicios {
+      padding: 50px 0;
+    }
+
+    #servicios h2 {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      color: #0D7C66;
+      margin-bottom: 30px;
+      font-size: 2rem;
+    }
+
+    .servicios-categorias {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .categoria {
+      background: #111;
+      border-radius: 10px;
+      overflow: hidden;
+      width: 220px;
+      text-align: center;
+    }
+
+    .categoria-toggle {
+      background: none;
+      border: none;
+      color: #0D7C66;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 15px;
+      width: 100%;
+      display: block;
+    }
+
+    .categoria-toggle i {
+      transition: transform 0.3s ease;
+      margin-left: 5px;
+    }
+
+    .categoria-servicios {
+      list-style: none;
+      padding: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .categoria-servicios li {
+      padding: 8px 15px;
+      font-size: 1.1rem;
+      color: #ccc;
+      border-bottom: 1px solid #333;
+    }
+
+    .categoria.active .categoria-servicios {
+      max-height: 500px;
+    }
+
+    .categoria.active .categoria-toggle i {
+      transform: rotate(180deg);
+    }
+
+    /* ====== SABÍAS QUE... ====== */
+    #sabias-que {
+      padding: 60px 0;
+      background: #0a0a0a;
+    }
+
+    #sabias-que h2 {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      color: #0D7C66;
+      margin-bottom: 40px;
+      font-size: 2rem;
+    }
+
+    .sabias-que-lista {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .sabias-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      background: #111;
+      padding: 18px;
+      border-radius: 12px;
+      border-left: 4px solid #0D7C66;
+      transition: transform 0.3s ease;
+    }
+
+    .sabias-item:hover {
+      transform: translateX(5px);
+      background: #1a1a1a;
+    }
+
+    .sabias-icon {
+      color: #0D7C66;
+      font-size: 1.4rem;
+      min-width: 36px;
+      text-align: center;
+    }
+
+    .sabias-text {
+      font-size: 1.15rem;
+      color: #ddd;
+      line-height: 1.6;
+    }
+
+    /* ====== PROMOCIONES ====== */
+    #promociones {
+      padding: 80px 0;
+      background: #0a0a0a;
+    }
+
+    #promociones h2 {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      color: #0D7C66;
+      margin-bottom: 50px;
+      font-size: 2.2rem;
+    }
+
+    .promociones-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .promo-card {
+      background: #111;
+      border-radius: 16px;
+      padding: 25px;
+      text-align: center;
+      border: 1px solid #222;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      color: #eee;
+    }
+
+    .promo-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 25px rgba(13, 124, 102, 0.2);
+      border-color: #0D7C66;
+    }
+
+    .promo-icon {
+      font-size: 2rem;
+      color: #0D7C66;
+      margin-bottom: 15px;
+    }
+
+    .promo-card h3 {
+      font-family: 'Playfair Display', serif;
+      color: #fff;
+      margin-bottom: 10px;
+      font-size: 1.3rem;
+    }
+
+    .promo-card p {
+      font-size: 1.1rem;
+      color: #ccc;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+
+    .promo-price {
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    .promo-price strong {
+      color: #0D7C66;
+      font-weight: bold;
+    }
+
+    .promo-price span {
+      display: block;
+      font-size: 0.9rem;
+      color: #aaa;
+      margin-top: 5px;
+    }
+
+    /* ====== CONTACTO ====== */
+    .contact-info {
+      text-align: center;
+      max-width: 600px;
+      margin: 30px auto;
+      color: #ccc;
+      font-size: 1.1rem;
+    }
+
+    iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+
+    /* ====== WHATSAPP ====== */
+    .whatsapp {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #25D366;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      z-index: 100;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 0;
+      background: #111;
+      color: #777;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo-container">
+          <img src="img/logo.png" alt="Logo ML Spa" class="logo-img">
+          <span class="logo-text">ML Spa</span>
+        </div>
+        <nav>
+          <ul>
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#galeria">Galería</a></li>
+            <li><a href="#sabias-que">Sabías que</a></li>
+            <li><a href="#promociones">Promociones</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="inicio" class="hero">
+    <h1>ML Spa Peluquería & Uñas</h1>
+    <p>Donde el estilo encuentra el bienestar</p>
+    <a href="https://wa.me/593995606618" class="btn">Reservar por WhatsApp</a>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section id="servicios">
+    <div class="container">
+      <h2>Servicios</h2>
+      <div class="servicios-categorias">
+        <!-- Barbería -->
+        <div class="categoria">
+          <button class="categoria-toggle">Barbería <i class="fas fa-chevron-down"></i></button>
+          <ul class="categoria-servicios">
+            <li>Corte clásico</li>
+            <li>Corte moderno</li>
+            <li>Corte degradado</li>
+            <li>Corte con tinte</li>
+            <li>Diseño de barba</li>
+            <li>Afeitado clásico</li>
+            <li>Barba con aceite natural</li>
+            <li>Barba con recorte artístico</li>
+          </ul>
+        </div>
+
+        <!-- Uñas -->
+        <div class="categoria">
+          <button class="categoria-toggle">Uñas <i class="fas fa-chevron-down"></i></button>
+          <ul class="categoria-servicios">
+            <li>Acrílico permanente</li>
+            <li>Acrílico semipermanente</li>
+            <li>Relleno acrílico</li>
+            <li>Sof gel tradicional</li>
+            <li>Sof gel encapsulado</li>
+            <li>Sof gel pintado</li>
+            <li>Uñas semipermanentes</li>
+            <li>Diseño artístico</li>
+            <li>Manicura express</li>
+            <li>Manicura Spa</li>
+          </ul>
+        </div>
+
+        <!-- Peluquería -->
+        <div class="categoria">
+          <button class="categoria-toggle">Peluquería <i class="fas fa-chevron-down"></i></button>
+          <ul class="categoria-servicios">
+            <li>Tinte completo</li>
+            <li>Mechas</li>
+            <li>Balayage</li>
+            <li>Alisado con keratina</li>
+            <li>Tratamiento de células madre</li>
+            <li>Peinado social</li>
+            <li>Peinado nupcial</li>
+            <li>Maquillaje básico</li>
+            <li>Hidratación profunda</li>
+            <li>Tratamiento anti-caída</li>
+          </ul>
+        </div>
+
+        <!-- Spa -->
+        <div class="categoria">
+          <button class="categoria-toggle">Spa <i class="fas fa-chevron-down"></i></button>
+          <ul class="categoria-servicios">
+            <li>Limpieza facial profunda</li>
+            <li>Tratamiento de piel (acné, poros, brillo)</li>
+            <li>SPA capilar con masaje</li>
+            <li>SPA facial relajante</li>
+            <li>Masaje antiestrés (cabeza, hombros, cuello)</li>
+            <li>SPA corporal con aromaterapia</li>
+            <li>SPA de manos y pies</li>
+            <li>Detox capilar</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERÍA -->
+  <section id="galeria">
+    <div class="container">
+      <h2>Galería</h2>
+      <div class="gallery-collage">
+        <img src="https://images.unsplash.com/photo-1562322140-8baeececf3b3?w=500&h=500&fit=crop" alt="Corte hombre">
+        <img src="https://images.unsplash.com/photo-1570142134225-79a5388e7754?w=500&h=500&fit=crop" alt="Coloración">
+        <img src="https://images.unsplash.com/photo-1569443693539-79a5388e7754?w=500&h=500&fit=crop" alt="Barba">
+        <img src="https://images.unsplash.com/photo-1605497788044-9f8845a55acb?w=500&h=500&fit=crop" alt="Manicura">
+        <img src="https://images.unsplash.com/photo-1521490413176-9e5b5cb7877d?w=500&h=500&fit=crop" alt="Peluquería">
+        <img src="https://images.unsplash.com/photo-1584385481286-d3a5388e7754?w=500&h=500&fit=crop" alt="Spa capilar">
+      </div>
+    </div>
+  </section>
+
+  <!-- SABÍAS QUE... -->
+  <section id="sabias-que">
+    <div class="container">
+      <h2>Sabías que...</h2>
+      <div class="sabias-que-lista">
+        <div class="sabias-item">
+          <div class="sabias-icon">
+            <i class="fas fa-droplet"></i>
+          </div>
+          <div class="sabias-text">
+            Si realizas hidratación regularmente a tu cabello, conseguirás un cabello más saludable, brillante y fuerte.
+          </div>
+        </div>
+
+        <div class="sabias-item">
+          <div class="sabias-icon">
+            <i class="fas fa-spa"></i>
+          </div>
+          <div class="sabias-text">
+            Los tratamientos con keratina no solo alisan, sino que también protegen el cabello del calor y la humedad.
+          </div>
+        </div>
+
+        <div class="sabias-item">
+          <div class="sabias-icon">
+            <i class="fas fa-nail-care"></i>
+          </div>
+          <div class="sabias-text">
+            Las uñas acrílicas son perfectas para quienes tienen uñas débiles o quieren lucir un diseño elegante por semanas.
+          </div>
+        </div>
+
+        <div class="sabias-item">
+          <div class="sabias-icon">
+            <i class="fas fa-brush"></i>
+          </div>
+          <div class="sabias-text">
+            El balayage es una técnica de iluminación natural que no necesita retoques frecuentes. Ideal para un look fresco.
+          </div>
+        </div>
+
+        <div class="sabias-item">
+          <div class="sabias-icon">
+            <i class="fas fa-hand-holding-heart"></i>
+          </div>
+          <div class="sabias-text">
+            Los masajes faciales mejoran la circulación y reducen la tensión. ¡Tu piel luce más joven después de uno!
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- PROMOCIONES -->
+<section id="promociones">
+  <div class="container">
+    <h2>Promociones Especiales</h2>
+    <div class="promociones-grid">
+      <!-- Promoción 1 -->
+      <div class="promo-card">
+        <div class="promo-icon">
+          <i class="fas fa-gem"></i>
+        </div>
+        <h3>Pack Belleza Completa</h3>
+        <p>Corte + Hidratación + Manicura Spa</p>
+        <div class="promo-price">
+          <strong>$1,099</strong> <span>(antes $1,400)</span>
+        </div>
+      </div>
+
+      <!-- Promoción 2 -->
+      <div class="promo-card">
+        <div class="promo-icon">
+          <i class="fas fa-heart"></i>
+        </div>
+        <h3>Pack Pareja de Estilo</h3>
+        <p>Él: corte + barba | Ella: corte + hidratación</p>
+        <div class="promo-price">
+          <strong>$1,200</strong> <span>¡Solo los sábados!</span>
+        </div>
+      </div>
+
+      <!-- Promoción 3 -->
+      <div class="promo-card">
+        <div class="promo-icon">
+          <i class="fas fa-star"></i>
+        </div>
+        <h3>Primera Vez en ML Spa</h3>
+        <p>15% de descuento en tu primer servicio</p>
+        <div class="promo-price">
+          <strong>Presenta este mensaje</strong>
+        </div>
+      </div>
+
+      <!-- Promoción 4 -->
+      <div class="promo-card">
+        <div class="promo-icon">
+          <i class="fas fa-recycle"></i>
+        </div>
+        <h3>Recomienda y Gana</h3>
+        <p>Gana $100 en créditos por cada amigo que reserve</p>
+        <div class="promo-price">
+          <strong>Tu amigo también obtiene 10% OFF</strong>
+        </div>
+      </div>
+
+      <!-- Promoción 5 -->
+      <div class="promo-card">
+        <div class="promo-icon">
+          <i class="fas fa-ring"></i>
+        </div>
+        <h3>Pack Novia Premium</h3>
+        <p>Prueba + corte + peinado + manicura Spa</p>
+        <div class="promo-price">
+          <strong>$1,800</strong> <span>Todo incluido</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- CONTACTO -->
+  <section id="contacto">
+    <div class="container">
+      <h2>Contacto</h2>
+      <div class="contact-info">
+        <p>• Dirección: Av. Julio Andrade Nueva Aurora Quito sur</p>
+        <p>• Teléfono: 0995606618</p>
+        <p>• Horario: L-V 9:00 - 19:00 | Sáb 8:00 - 17:00</p>
+        <div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 75%;">
+          <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyD1VnYC6EugmolDY9RjsZ77TeXstyj0288&q=M%2FL+Spa+Peluquer%C3%ADa,+Quito,+Ecuador&zoom=17" style="top: 0; left: 0; width: 100%; height: 100%; position: absolute; border: 0;" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHATSAPP -->
+  <a href="https://wa.me/593995606618" class="whatsapp">💬 WhatsApp</a>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 ML Spa Peluquería & Uñas. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT PARA MENÚS DESPLEGABLES -->
+  <script>
+    document.querySelectorAll('.categoria-toggle').forEach(button => {
+      button.addEventListener('click', () => {
+        const categoria = button.parentElement;
+        categoria.classList.toggle('active');
+      });
+    });
+  </script>
+
+</body>
+</html>
